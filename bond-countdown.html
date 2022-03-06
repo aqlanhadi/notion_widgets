@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <title>Bond Days Left</title>
+    <style>
+        
+        body{
+            font-family: 'Open Sans', sans-serif;
+            color: darkgrey;
+            background-color: #fff;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            grid-gap: .5rem;
+            padding: 1rem;            
+        }
+
+        #text-container {
+            display: flex;
+            flex-direction: row;
+            margin: auto;
+        }
+
+        #grid-container {
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            height: 4.5rem;
+            width: 100%;
+            grid-gap: .12rem;
+        }
+
+        .day {
+            width: .5rem;
+            height: .5rem;
+            max-width: .5rem;
+            max-height: .5rem;
+            background-color: #8fd182;
+        }
+
+        .day-uncounted {
+            background-color: #f7f7f7;            
+        }
+
+        .day-future {
+            background-color: #f7f7f7;            
+        }
+
+        .day-annual {
+            background-color: #ff8585;            
+        }
+
+        .divider {
+            width: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        
+        <div id="text-container">
+            <div style="font-weight: 700;margin-right: 2px;">
+                <span style="color: #8fd182;" id="bond-elapsed">-</span>
+                <span>/</span>
+                <span style="color: #ff8585;" id="bond-duration">-</span>
+            </div>
+            <span class="divider"></span>
+            <div style="margin-left: 2px; margin-right: 2px;">
+                <span id="bond-progress">-</span>
+            </div>
+            <span class="divider"></span>
+            <div style="margin-left: 2px; margin-right: 2px;">
+                <span id="bond-remaining">-</span>
+            </div>
+
+        </div>
+        <div id="grid-container"></div>
+    </div>
+
+
+
+    <script>
+
+        const bondStart = new Date('2020-02-14')
+        const bondEnd = new Date('2023-02-15')
+        const elapsed = Math.floor((bondEnd - Date.now()) / (1000 * 60 * 60 * 24))
+        const bondPeriod = Math.floor((bondEnd - bondStart) / (1000 * 60 * 60 * 24))
+
+        console.log(`${elapsed}/${bondPeriod}`)
+
+        var container = document.getElementById("grid-container");
+        var text = document.getElementById("text-container");
+
+        for (var i = 0; i < bondPeriod; i++) {
+            var grid = document.createElement("div");
+
+            if (i === 0) {
+                grid.className = "day day-uncounted";
+            } else if (i < elapsed) {
+                grid.className = "day";
+            } else if (i == 365 || i == 365 * 2 || i == 365 * 3) {
+                grid.className = "day day-annual";
+            } else {
+                grid.className = "day day-future";
+            }
+            container.appendChild(grid);
+        }
+
+        document.getElementById("bond-elapsed").innerHTML = elapsed;
+        document.getElementById("bond-duration").innerHTML = bondPeriod;
+        document.getElementById("bond-progress").innerHTML = `${(elapsed/bondPeriod*100).toFixed(2)}%`;
+        document.getElementById("bond-remaining").innerHTML = `${bondPeriod - elapsed} days left`;
+
+            
+    // timer = setInterval (showRemaining, 1000) 
+
+    </script>
+</body>
+</html>
