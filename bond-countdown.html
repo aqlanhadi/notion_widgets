@@ -85,6 +85,10 @@
             <div style="margin-left: 2px; margin-right: 2px;">
                 <span id="bond-remaining">-</span>
             </div>
+            <span class="divider"></span>
+            <div style="margin-left: 2px; margin-right: 2px;">
+                <span id="amount-remaining">-</span>
+            </div>
 
         </div>
         <div id="grid-container"></div>
@@ -130,12 +134,15 @@
 
             container.replaceChildren(...grids);
 
+            const amount = (200000 / (bondPeriod * 24 * 60 * 60)) * (elapsedDays* 24 * 60 * 60);
+
 
 
             document.getElementById("bond-elapsed").innerHTML = elapsedDays;
             document.getElementById("bond-duration").innerHTML = bondPeriod;
             document.getElementById("bond-progress").innerHTML = `${(elapsedDays/bondPeriod*100).toFixed(2)}%`;
             document.getElementById("bond-remaining").innerHTML = `${bondPeriod - elapsedDays} days ${remainingHours} hours ${remainingMinutes} minutes ${remainingSeconds} seconds left`;
+            document.getElementById("amount-remaining").innerHTML = `RM ${200000 - amount.toFixed(2)} owed`;
             setTimeout(render, second_ms);
         })()
 
