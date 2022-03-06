@@ -142,7 +142,7 @@
             document.getElementById("bond-duration").innerHTML = bondPeriod;
             document.getElementById("bond-progress").innerHTML = `${(elapsedDays/bondPeriod*100).toFixed(2)}%`;
             document.getElementById("bond-remaining").innerHTML = `${bondPeriod - elapsedDays} days ${remainingHours} hours ${remainingMinutes} minutes ${remainingSeconds} seconds left`;
-            document.getElementById("amount-remaining").innerHTML = `RM ${200000 - amount.toFixed(2)} owed`;
+            document.getElementById("amount-remaining").innerHTML = `RM ${amount.toFixed(2)} paid — RM ${200000-amount.toFixed(2)} left`;
             setTimeout(render, second_ms);
         })()
 
