@@ -94,38 +94,39 @@
 
     <script>
 
-        const bondStart = new Date('2020-02-14')
-        const bondEnd = new Date('2023-02-15')
-        const elapsed = Math.floor((bondEnd - Date.now()) / (1000 * 60 * 60 * 24))
-        const bondPeriod = Math.floor((bondEnd - bondStart) / (1000 * 60 * 60 * 24))
+        const hour_ms = 1000 * 60 * 60;
 
-        console.log(`${elapsed}/${bondPeriod}`)
+        setInterval(() =>{
+            const bondStart = new Date('2020-02-14')
+            const bondEnd = new Date('2023-02-15')
+            const elapsed = Math.floor((bondEnd - Date.now()) / (1000 * 60 * 60 * 24))
+            const bondPeriod = Math.floor((bondEnd - bondStart) / (1000 * 60 * 60 * 24))
 
-        var container = document.getElementById("grid-container");
-        var text = document.getElementById("text-container");
+            console.log(`${elapsed}/${bondPeriod}`)
 
-        for (var i = 0; i < bondPeriod; i++) {
-            var grid = document.createElement("div");
+            var container = document.getElementById("grid-container");
+            var text = document.getElementById("text-container");
 
-            if (i === 0) {
-                grid.className = "day day-uncounted";
-            } else if (i < elapsed) {
-                grid.className = "day";
-            } else if (i == 365 || i == 365 * 2 || i == 365 * 3) {
-                grid.className = "day day-annual";
-            } else {
-                grid.className = "day day-future";
+            for (var i = 0; i < bondPeriod; i++) {
+                var grid = document.createElement("div");
+
+                if (i === 0) {
+                    grid.className = "day day-uncounted";
+                } else if (i < elapsed) {
+                    grid.className = "day";
+                } else if (i == 365 || i == 365 * 2 || i == 365 * 3) {
+                    grid.className = "day day-annual";
+                } else {
+                    grid.className = "day day-future";
+                }
+                container.appendChild(grid);
             }
-            container.appendChild(grid);
-        }
 
-        document.getElementById("bond-elapsed").innerHTML = elapsed;
-        document.getElementById("bond-duration").innerHTML = bondPeriod;
-        document.getElementById("bond-progress").innerHTML = `${(elapsed/bondPeriod*100).toFixed(2)}%`;
-        document.getElementById("bond-remaining").innerHTML = `${bondPeriod - elapsed} days left`;
-
-            
-    // timer = setInterval (showRemaining, 1000) 
+            document.getElementById("bond-elapsed").innerHTML = elapsed;
+            document.getElementById("bond-duration").innerHTML = bondPeriod;
+            document.getElementById("bond-progress").innerHTML = `${(elapsed/bondPeriod*100).toFixed(2)}%`;
+            document.getElementById("bond-remaining").innerHTML = `${bondPeriod - elapsed} days left`;
+        }, hour_ms)
 
     </script>
 </body>
