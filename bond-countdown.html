@@ -96,7 +96,7 @@
 
         const hour_ms = 1000 * 60 * 60;
 
-        setInterval(() =>{
+        const render = () => {
             const bondStart = new Date('2020-02-14')
             const bondEnd = new Date('2023-02-15')
             const elapsed = Math.floor((bondEnd - Date.now()) / (1000 * 60 * 60 * 24))
@@ -126,7 +126,11 @@
             document.getElementById("bond-duration").innerHTML = bondPeriod;
             document.getElementById("bond-progress").innerHTML = `${(elapsed/bondPeriod*100).toFixed(2)}%`;
             document.getElementById("bond-remaining").innerHTML = `${bondPeriod - elapsed} days left`;
-        }, hour_ms)
+            setTimeout(render, hour_ms);
+        }
+
+        render()
+
 
     </script>
 </body>
