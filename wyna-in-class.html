@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Is Wyna in class?</title>
+    <style>
+        
+        body{
+            font-family: 'Open Sans', sans-serif;
+            color: darkgrey;
+            /* can comment out this line to see the difference */
+            background-color: rgb(25,25,25);
+            overflow: hidden;
+        }
+
+        .box {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            width: fit-content;
+            padding: 1rem;            
+        }
+
+        #status {
+            line-height: 1;
+            font-weight: 700;
+            font-size: xx-large;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <span style="font-size: small;">Wyna is</span>
+        <span id="status">-</span>
+        <span id="fade"></span>
+        
+    </div>
+
+    <script>
+        console.log(`Wyna was mad because I didn't check her schedule before talking to her (on 7/3/2022)`);
+        const classes = {
+            1: [
+                { start: 8, end: 10, class: 'Entrepreneurship' },
+                { start: 11, end: 13, class: 'Knowledge Discovery'},
+                { start: 14, end: 16, class: 'Strategic Business Analytics'}
+            ],
+            2: [
+                { start: 9, end: 11, class: 'Business Team Project'}
+            ],
+            3: [
+                { start: 10, end: 12, class: 'Business Team Project'},
+                { start: 12, end: 14, class: 'Knowledge Discovery'}
+            ],
+            4: [
+                { start: 9, end: 11, class: 'Strategic Business Analytics'}
+            ],
+        };
+
+        const formatAMPM = (hour) => {
+            let ampm = hour >= 12 ? 'pm' : 'am';
+            hour = hour % 12;
+            hour = hour ? hour : 12;
+            return hour + ampm;
+        };
+
+        (function render() {           
+
+            const now = new Date()
+
+            const day = now.getDay()
+            const hour = now.getHours()
+            const minute = now.getMinutes()
+
+            console.log(classes[day], hour);
+
+            const curr = classes[day].find(({ start, end }) => {
+                return hour >= start && hour < end
+            })
+            
+            if (!curr) {
+                document.getElementById('status').innerText = 'Free';
+                document.getElementById('status').style.color = 'green';
+                return
+            }
+
+            document.getElementById('status').innerText = 'In Class';
+            document.getElementById('status').style.color = 'red';
+
+            const timeLeft = (curr.end - hour) * 60 + (60 - minute)            
+            
+            var text = [curr.class,`${formatAMPM(curr.start)} - ${formatAMPM(curr.end)}` ,`Ending in ${timeLeft} minutes`];
+            var counter = 0;
+            var elem = document.getElementById("fade");
+            function change() {
+            jQuery(elem).delay(2000).fadeTo(500, 0, function() {
+                this.innerHTML = text[counter];
+                counter = ++counter % text.length;
+                jQuery(this).fadeTo(1400, 1, change)
+            })
+            }
+            change()
+
+            
+            setTimeout(render, 1000 * 60);
+        })()
+
+    </script>
+</body>
+</html>
