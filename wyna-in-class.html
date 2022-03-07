@@ -39,7 +39,7 @@
     <div class="box">
         <span style="font-size: small;">Wyna is</span>
         <span id="status">-</span>
-        <span id="fade"></span>
+        <span id="fade">default</span>
         
     </div>
 
@@ -49,7 +49,8 @@
             1: [
                 { start: 8, end: 10, class: 'Entrepreneurship' },
                 { start: 11, end: 13, class: 'Knowledge Discovery'},
-                { start: 14, end: 16, class: 'Strategic Business Analytics'}
+                { start: 14, end: 16, class: 'Strategic Business Analytics'},
+                { start: 16, end: 21, class: 'Strategic Business Analytics'}
             ],
             2: [
                 { start: 9, end: 11, class: 'Business Team Project'}
@@ -70,45 +71,58 @@
             return hour + ampm;
         };
 
-        (function render() {           
+        const getNextMinuteMS = () => {
+            const now = new Date();
+            const nextMinute = new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes() + 1, 0);
+            console.log(`next refresh is at ${(nextMinute.getTime() - now.getTime()) / 1000} seconds from now`);
+            return nextMinute.getTime() - now.getTime();
+        };
+
+        let counter = 0;
+        
+
+        (function render() {
 
             const now = new Date()
-
             const day = now.getDay()
             const hour = now.getHours()
             const minute = now.getMinutes()
 
-            console.log(classes[day], hour);
-
-            const curr = classes[day].find(({ start, end }) => {
+            let curr = classes[day].find(({ start, end }) => {
                 return hour >= start && hour < end
             })
+
+            let nextClass = classes[day].find(({ start, end }) => {
+                return hour < start
+            })
+
+            var elem = document.getElementById("fade");
+                  
             
             if (!curr) {
                 document.getElementById('status').innerText = 'Free';
                 document.getElementById('status').style.color = 'green';
-                return
-            }
 
-            document.getElementById('status').innerText = 'In Class';
-            document.getElementById('status').style.color = 'red';
+                if (nextClass) $(elem).html(`${nextClass.class} at ${formatAMPM(nextClass.start)}`)
+                else $(elem).html(`No classes left`)
 
-            const timeLeft = (curr.end - hour) * 60 + (60 - minute)            
-            
-            var text = [curr.class,`${formatAMPM(curr.start)} - ${formatAMPM(curr.end)}` ,`Ending in ${timeLeft} minutes`];
-            var counter = 0;
-            var elem = document.getElementById("fade");
-            function change() {
-            jQuery(elem).delay(1500).fadeTo(1500, 0, function() {
-                this.innerHTML = text[counter];
-                counter = ++counter % text.length;
-                jQuery(this).fadeTo(1500, 1, change)
-            })
-            }
-            change()
+            } else {
+                document.getElementById('status').innerText = 'In Class';
+                document.getElementById('status').style.color = 'red';
 
-            
-            setTimeout(render, 1000 * 60);
+                const timeLeft = (curr.end - hour) * 60 - minute;
+                
+                var text = [curr.class,`${formatAMPM(curr.start)} - ${formatAMPM(curr.end)}` ,`Ending in ${timeLeft} minutes`];
+                
+                let loop = true;
+
+                $(elem).html(text[counter % text.length]);
+                // counter++;
+                $(elem).fadeTo(1500, 1);
+                $(elem).fadeTo(1500, 0);
+                counter++;
+            } 
+            setTimeout(render, 3500);
         })()
 
     </script>
