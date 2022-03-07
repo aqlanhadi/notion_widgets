@@ -99,10 +99,10 @@
             var counter = 0;
             var elem = document.getElementById("fade");
             function change() {
-            jQuery(elem).delay(2000).fadeTo(500, 0, function() {
+            jQuery(elem).delay(1500).fadeTo(1500, 0, function() {
                 this.innerHTML = text[counter];
                 counter = ++counter % text.length;
-                jQuery(this).fadeTo(1400, 1, change)
+                jQuery(this).fadeTo(1500, 1, change)
             })
             }
             change()
